@@ -1,0 +1,23 @@
+import axios from 'axios';
+import useAuthStore from '../features/auth/authStore';
+
+// Criação da instância do Axios
+const api = axios.create({
+  baseURL: import.meta.env.VITE_API_URL || 'http://localhost:5234/api',
+});
+
+// Interceptor para incluir o token automaticamente
+api.interceptors.request.use(
+  (config) => {
+    const token = useAuthStore.getState().userData?.token;
+
+    if (token) {
+      config.headers.Authorization = `Bearer ${token}`;
+    }
+
+    return config;
+  },
+  (error) => Promise.reject(error)
+);
+
+export default api;
