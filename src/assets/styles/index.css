@@ -1,9 +1,12 @@
-body {
-  font-family: 'Quicksand', sans-serif;
-  background-color: #fdfaf6;
-  color: #333;
+:root {
+  margin: 0;
+  padding: 0;
 }
 
-h1, h2, h3 {
-  font-family: 'Playfair Display', serif;
+body {
+  font-family: 'Poppins', 'Quicksand', sans-serif;
+  background-color: #E7AB90;
+  color: #6F1123;
+  margin: 0;
+  padding: 0;
 }

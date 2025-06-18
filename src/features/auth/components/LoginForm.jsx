@@ -1,73 +1,69 @@
 import { useState } from "react";
 import { Formik, Form } from "formik";
 import * as Yup from "yup";
+import { useAuthActions } from "../authStore";
+import authService from "../hooks/useAuthService";
 import InputField from "../components/InputField";
-import { useAuthActions } from '../authStore';
-import api from "../../../lib/api";
+import RoundButton from "../../../shared/components/RoundButton";
+import { extractApiError } from "../../../shared/utils/ErrorHandler";
 
 const validationSchema = Yup.object({
-    email: Yup.string().email("E-mail inválido").required("Campo obrigatório"),
-    password: Yup.string()
-        .min(4, "Mínimo de 4 caracteres")
-        .required("Campo obrigatório"),
+  username: Yup.string()
+    .min(3, "Mínimo de 3 caracteres")
+    .required("Campo obrigatório"),
+  password: Yup.string()
+    .min(6, "Mínimo de 6 caracteres")
+    .required("Campo obrigatório"),
 });
 
 const LoginForm = () => {
-    const { handleLogin } = useAuthActions();
-    const [formError, setFormError] = useState(null);
-    const [isLoading, setIsLoading] = useState(false);
+  const { handleLogin } = useAuthActions();
+  const [formError, setFormError] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
 
-    const handleSubmit = async (values) => {
-        setFormError(null);
-        setIsLoading(true);
+  const handleSubmit = async (values) => {
+    setFormError(null);
+    setIsLoading(true);
 
-        try {
-            const response = await api.post("/login", {
-                email: values.email,
-                password: values.password,
-            });
+    try {
+      const { token, username, userId } = await authService.login(values);
+      handleLogin({ token, username, userId });
+    } catch (error) {
+      console.error(error);
+      setFormError(extractApiError(error) || "Erro ao fazer login.");
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
-            const { token, user } = response.data;
+  return (
+    <Formik
+      initialValues={{ username: "", password: "" }}
+      validationSchema={validationSchema}
+      onSubmit={handleSubmit}
+    >
+      <Form style={{display: 'flex', flexDirection: 'column', justifyContent: 'center', gap: '4rem', marginTop: '2rem'}}>
+        <InputField
+          name="username"
+          type="text"
+          autoComplete="username"
+          borderRadius="50px"
+        />
+        <InputField
+          name="password"
+          type="password"
+          autoComplete="current-password"
+          borderRadius="50px"
+        />
 
-            // Salva os dados no Zustand (e localStorage)
-            handleLogin({ token, ...user });
-        } catch (error) {
-            console.error(error);
-            setFormError(
-                error.response?.data?.message ||
-                    "Erro ao fazer login. Verifique suas credenciais."
-            );
-        } finally {
-            setIsLoading(false);
-        }
-    };
+        {formError && (
+          <div style={{ color: "red", marginTop: "8px" }}>{formError}</div>
+        )}
 
-    return (
-        <Formik
-            initialValues={{ email: "", password: "" }}
-            validationSchema={validationSchema}
-            onSubmit={handleSubmit}
-        >
-            <Form>
-                <InputField name="email" label="Email" type="text" />
-                <InputField name="password" label="Senha" type="password" />
-
-                {formError && (
-                    <div style={{ color: "red", marginTop: "8px" }}>
-                        {formError}
-                    </div>
-                )}
-
-                <button
-                    type="submit"
-                    disabled={isLoading}
-                    style={{ marginTop: "16px" }}
-                >
-                    {isLoading ? "Entrando..." : "Entrar"}
-                </button>
-            </Form>
-        </Formik>
-    );
+        <RoundButton type="submit" disabled={isLoading} color="green" text={isLoading ? "Entrando..." : "Entrar"} />
+      </Form>
+    </Formik>
+  );
 };
 
 export default LoginForm;

@@ -1,7 +1,6 @@
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
 import { useNavigate } from "react-router-dom";
-import api from "../../lib/api";
 
 const useAuthStore = create(
   persist(
@@ -32,13 +31,11 @@ export const useAuthActions = () => {
     navigate('/login');
   };
 
-  const handleLogin = async (email, password) => {
+  const handleLogin = async (userData) => {
     try {
-      const response = await api.post('/login', { email, password });
-      const userData = response.data; // token + user info
 
       login(userData);
-      navigate('/dashboard');
+      navigate('/');
     } catch (error) {
       // Trate o erro aqui (toast, alert, etc)
       console.error('Falha no login:', error);

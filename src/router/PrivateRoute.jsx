@@ -5,15 +5,12 @@ import PropTypes from 'prop-types';
 const PrivateRoute = ({ children }) => {
   const userData = useAuthStore((state) => state.userData);
 
-  PrivateRoute.PropTypes = {
+  PrivateRoute.propTypes = {
     children: PropTypes.node.isRequired
   }
   return userData ? children : <Navigate to="/login" />;
 }
 
-PrivateRoute.propTypes = {
-  children: PropTypes.element.isRequired
-}
 
 export default PrivateRoute;
 
