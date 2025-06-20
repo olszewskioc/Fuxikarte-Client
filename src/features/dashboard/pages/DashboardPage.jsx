@@ -1,14 +1,10 @@
-import useAuthStore from '../../auth/authStore';
+import AsideMenu from '../../../shared/components/AsideMenu';
 
 const Dashboard = () => {
-  const userData = useAuthStore((state) => state.userData);
-  const logout = useAuthStore((state) => state.logout);
+  // const userData = useAuthStore((state) => state.userData);
 
   return (
-    <div>
-      <h1>Bem-vindo, {userData?.name}!</h1>
-      <button onClick={logout}>Sair</button>
-    </div>
+    <AsideMenu />
   );
 };
 
