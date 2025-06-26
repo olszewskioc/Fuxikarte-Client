@@ -6,7 +6,7 @@ const Dashboard = () => {
 
   return (
     <div>
-      <h1>Bem-vindo, {userData?.name}!</h1>
+      <h1>Bem-vindo, {userData?.username}!</h1>
       <button onClick={logout}>Sair</button>
     </div>
   );
