@@ -1,8 +1,9 @@
 import PropTypes from 'prop-types';
 import { Box } from "@mui/material";
 import AsideMenu from "./AsideMenu";
+import { Outlet } from "react-router-dom";
 
-const Layout = ({children}) => {
+const Layout = () => {
     Layout.propTypes = {
     children: PropTypes.node.isRequired
   }
@@ -17,7 +18,7 @@ const Layout = ({children}) => {
                 overflowY: "auto",
                 backgroundColor: "var(--background-color)"
             }}>
-                {children}
+                <Outlet />
             </Box>
         </Box>
     )

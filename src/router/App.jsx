@@ -16,9 +16,10 @@ function App() {
         checkToken();
     }, [checkToken]);
     return (
-        <Layout>
-            <Routes>
-                <Route path="/login" element={<LoginPage />} />
+        <Routes>
+            <Route path="/login" element={<LoginPage />} />
+
+            <Route element={<Layout/>}>
                 <Route
                     path="/"
                     element={
@@ -51,8 +52,8 @@ function App() {
                         </PrivateRoute>
                     }
                 />
-            </Routes>
-        </Layout>
+            </Route>
+        </Routes>
     );
 }
 

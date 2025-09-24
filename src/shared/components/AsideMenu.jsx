@@ -45,6 +45,7 @@ const AsideMenu = () => {
     >
       <IconButton
         onClick={handleLogout}
+        title='Logout'
         sx={{
           ariaLabel: "Logout button",
           width: "100%",
@@ -56,12 +57,26 @@ const AsideMenu = () => {
       <Stack sx={{ margin: "2rem 0px" }} spacing={10}>
         {menuItems.map((item) => {
           const isActive = location.pathname === item.path;
+
+          const handleNavigate = () => {
+            navigate(item.path);
+            if (isMobile) setOpen(false);
+          };
           return (
             <Box
               key={item.path}
+              role="button"
+              tabIndex={0}
+              aria-current={isActive ? "page" : undefined}
               onClick={() => {
                 navigate(item.path);
                 if (isMobile) setOpen(false);
+              }}
+              onKeyDown={(e) => {
+                if (e.key === "Enter" || e.key === " ") {
+                  e.preventDefault();   // evita scroll no espaço
+                  handleNavigate();     // dispara navegação
+                }
               }}
               sx={{
                 display: "flex",
