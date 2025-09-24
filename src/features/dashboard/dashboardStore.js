@@ -1,8 +1,8 @@
 import { create } from "zustand";
 
-const useAuthStore = create((set) => ({
+const useDashStore = create((set) => ({
     filters: null,
     setFilters: (data) => set({filters: data})
 }))
 
-export default useAuthStore;
+export default useDashStore;

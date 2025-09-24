@@ -1,12 +1,19 @@
 :root {
   margin: 0;
   padding: 0;
+  --background-color: #E7AB90;
+  --text-color: #6F1123;
+  --primary-color: #D97B5B;
+  --secondary-color: #E9D5A2;
+  --accenture-color: #7CB691;
+  --accenture-color-alt: #B70F23;
+
 }
 
 body {
   font-family: 'Poppins', 'Quicksand', sans-serif;
-  background-color: #E7AB90;
-  color: #6F1123;
+  background-color: var(--background-color);
+  color: var(--text-color);
   margin: 0;
   padding: 0;
 }
