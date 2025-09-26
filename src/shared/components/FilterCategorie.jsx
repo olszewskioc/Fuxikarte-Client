@@ -80,7 +80,7 @@ const FilterCategorie = () => {
             fontFamily: 'Poppins', 
             border: 'none', 
             "& fieldset": {border: "none", borderRadius: '10px'}, 
-    }}
+        }}
         IconComponent={() => null}
       >
         {categories.map((categorie) => (

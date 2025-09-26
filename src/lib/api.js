@@ -2,7 +2,7 @@ import axios from 'axios';
 import useAuthStore from '../features/auth/authStore';
 
 const api = axios.create({
-  baseURL: import.meta.env.VITE_API_URL || 'http://localhost:5234/api',
+  baseURL: import.meta.env.VITE_API_URL || 'http://localhost:5000/api',
 });
 
 // Interceptor para incluir o token automaticamente
