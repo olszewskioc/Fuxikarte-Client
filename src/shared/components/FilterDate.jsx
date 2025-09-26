@@ -13,7 +13,7 @@ const CustomTextField = forwardRef((props, ref) => (
         fullWidth
         sx={{
             m: 1,
-            width: "15rem",
+            width: "10rem",
             backgroundColor: "var(--secondary-color)",
             borderRadius: "10px",
             boxShadow: "3px 4px 6px rgba(0,0,0,0.25)",
