@@ -1,4 +1,3 @@
-import { useState, useEffect } from "react";
 import dayjs from "dayjs";
 import {
     Drawer,
@@ -12,41 +11,26 @@ import FilterListIcon from "@mui/icons-material/FilterList";
 import FilterCategorie from "../../../shared/components/FilterCategorie.jsx";
 import FilterDate from "../../../shared/components/FilterDate.jsx";
 import ValueBox from "../components/ValueBox.jsx";
+import useDashStore from "../dashboardStore.js"
+import { useState } from "react";
 
 const Dashboard = () => {
-    const [category, setCategory] = useState(["Todas"]);
-    const [startDate, setStartDate] = useState(dayjs());
-    const [endDate, setEndDate] = useState(dayjs());
+    const { filters, setFilters } = useDashStore();
     const [open, setOpen] = useState(false);
 
     const theme = useTheme();
     const isSmallScreen = useMediaQuery(theme.breakpoints.down("sm"));
 
-    // Carrega filtros salvos
-    useEffect(() => {
-        const raw = localStorage.getItem("dashboard:filters");
-        if (!raw) return;
-        try {
-            const parsed = JSON.parse(raw);
-            if (parsed.category) setCategory(parsed.category);
-            if (parsed.startDate) setStartDate(dayjs(parsed.startDate));
-            if (parsed.endDate) setEndDate(dayjs(parsed.endDate));
-        } catch (e) {
-            console.error(e.message);
-        }
-    }, []);
+    const category = filters?.category ?? ["Todas"];
+    const startDate = filters?.startDate ? dayjs(filters.startDate) : dayjs();
+    const endDate = filters?.endDate ? dayjs(filters.endDate) : dayjs();
 
-    // Salva filtros no localStorage
-    useEffect(() => {
-        localStorage.setItem(
-            "dashboard:filters",
-            JSON.stringify({
-                category,
-                startDate: startDate?.toISOString?.() ?? null,
-                endDate: endDate?.toISOString?.() ?? null,
-            })
-        );
-    }, [category, startDate, endDate]);
+    const handleCategoryChange = (val) =>
+        setFilters({ category: val, startDate, endDate });
+    const handleStartDateChange = (val) =>
+        setFilters({ category, startDate: val, endDate });
+    const handleEndDateChange = (val) =>
+        setFilters({ category, startDate, endDate: val });
 
     const toggleDrawer = () => setOpen((v) => !v);
 
@@ -58,9 +42,9 @@ const Dashboard = () => {
                     justifyContent: "space-between",
                     alignItems: "center",
                     padding: 0,
-                    position: "sticky", // fixa no topo quando rola a página
+                    position: "sticky",
                     top: 0,
-                    zIndex: 1100, // acima do conteúdo
+                    zIndex: 1100,
                 }}
             >
                 {isSmallScreen && (
@@ -70,7 +54,7 @@ const Dashboard = () => {
                             position: "absolute",
                             right: 0,
                             top: 0,
-                            color: '#FFFFFF'
+                            color: "#FFFFFF",
                         }}
                     >
                         <FilterListIcon />
@@ -88,17 +72,17 @@ const Dashboard = () => {
                         borderBottom: "2px dashed var(--primary-color)",
                     }}
                 >
-                    <FilterCategorie value={category} onChange={setCategory} />
+                    <FilterCategorie value={category} onChange={handleCategoryChange} />
                     <FilterDate
                         dateType="start"
                         value={startDate}
-                        onChange={setStartDate}
+                        onChange={handleStartDateChange}
                         otherDate={endDate}
                     />
                     <FilterDate
                         dateType="end"
                         value={endDate}
-                        onChange={setEndDate}
+                        onChange={handleEndDateChange}
                         otherDate={startDate}
                     />
                 </Stack>
@@ -118,37 +102,38 @@ const Dashboard = () => {
                 }}
             >
                 <Stack spacing={2} alignItems={"center"}>
-                    <FilterCategorie value={category} onChange={setCategory} />
+                    <FilterCategorie value={category} onChange={handleCategoryChange} />
                     <FilterDate
                         dateType="start"
                         value={startDate}
-                        onChange={setStartDate}
+                        onChange={handleStartDateChange}
                         otherDate={endDate}
                     />
                     <FilterDate
                         dateType="end"
                         value={endDate}
-                        onChange={setEndDate}
+                        onChange={handleEndDateChange}
                         otherDate={startDate}
                     />
                 </Stack>
             </Drawer>
-            <Grid container spacing={2} sx={{ p: 2, width: "100%", justifyContent: 'center' }}>
+
+            <Grid container spacing={2} sx={{ p: 1, width: "100%", justifyContent: "center" }}>
                 {/* Linha 1 */}
-                <Grid item size={{ xs: 12, md: 4 }}>
-                    <ValueBox>Valor Vendido</ValueBox>
+                <Grid size={{ xs: 12, md: 4 }} sx={{ p: 3 }}>
+                    <ValueBox value={5000} type={"sales"}>Valor Vendido</ValueBox>
                 </Grid>
-                <Grid item size={{ xs: 12, md: 4 }}>
-                    <ValueBox>Valor Gasto</ValueBox>
+                <Grid size={{ xs: 12, md: 4 }} sx={{ p: 3 }}>
+                    <ValueBox value={5000} type={"expenses"}>Valor Gasto</ValueBox>
                 </Grid>
-                <Grid item size={{ xs: 12, md: 4 }}>
+                <Grid size={{ xs: 12, md: 4 }} sx={{ p: 3 }}>
                     <ValueBox>Top Produto</ValueBox>
                 </Grid>
                 {/* Linha 2 */}
-                <Grid item size={{ xs: 12, md: 8 }} sx={{minHeight: 350}}>
+                <Grid size={{ xs: 12, md: 8 }} sx={{ minHeight: 350, p: 3 }}>
                     <ValueBox>Vendas/Mês</ValueBox>
                 </Grid>
-                <Grid item size={{ xs: 12, md: 4 }} sx={{minHeight: 200}}>
+                <Grid size={{ xs: 12, md: 4 }} sx={{ minHeight: 200, p: 3 }}>
                     <ValueBox>Produtos Vendidos</ValueBox>
                 </Grid>
             </Grid>

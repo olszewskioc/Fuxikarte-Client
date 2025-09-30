@@ -4,9 +4,6 @@ import AsideMenu from "./AsideMenu";
 import { Outlet } from "react-router-dom";
 
 const Layout = () => {
-    Layout.propTypes = {
-    children: PropTypes.node.isRequired
-  }
     return (
         <Box sx={{display: 'flex', height: '100vh'}}>
             <AsideMenu />
@@ -22,6 +19,10 @@ const Layout = () => {
             </Box>
         </Box>
     )
+};
+
+Layout.propTypes = {
+    children: PropTypes.node
 };
 
 export default Layout;
